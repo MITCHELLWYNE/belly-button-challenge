@@ -126,10 +126,30 @@ function buildBubbleChart(sample) {
 
 function buildGaugeChart(sample) {
 
-    d3.json(url).then((data)) => {
-        
-    }
-}
+    d3.json(url).then((data) => {
+        let sampleInfo = data.samples;
+        let value = sampleInfo.filter(results == sample);
+        let valueData = value[0];
+        let otu_ids = valueData.otu_ids;
+        let otu_labels = valueData.otu_labels;
+        let sample_values = valueData.sample_values;
+
+        // console.log(otu_ids, otu_labels, sample_values);
+
+        let traceGauge = [{
+            domain: { x: [0,1], y: [0,1] },
+            value: valueData,
+            title: {text: "Belly Button Washing Frequency", font: {size: 24} },
+            type: "indicator",
+            mode: "gauge+number"
+            }
+        ];
+        let gaugeSet = [traceGauge]
+
+        let layoutGauge = {width: 600, height: 500, margin: {t:0, b: 0}};
+        Plotly.newPlot("gauge", gaugeSet, layoutGauge)
+    });
+};
 
 function optionChanged(value) { 
 
